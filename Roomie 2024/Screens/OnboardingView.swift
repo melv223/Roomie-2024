@@ -17,7 +17,7 @@ struct OnboardingView: View {
             Button(action: {
                 isOnboardingViewActive = false
             }){
-                Text("Get Started")
+                Text("Get Started!")
             }
         } // End of VStack
         
