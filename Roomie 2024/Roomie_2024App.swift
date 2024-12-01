@@ -49,28 +49,33 @@ class ManhattanUniversityUser {
         self.email = email
     }
 }
+
 //User
 /* ---------- CHILD CLASS Student User ------------------- */
 class StudentManhattanUniversityUser: ManhattanUniversityUser {
     /* Creating additional student attributes */
-    var room: String
+    var room: String? // Will be assigned by staff
+    var roomPreference: String
+    var residenceHallPreference: String
     var phoneNumber: Int
     var creditCardNumber: Int
     var expirationDate: String
     var Cvc: Int
     
     // Constructor to initialize atrributies
-    init(firstName: String, lastName: String, email: String, room: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int) {
-        self.room = room
+    init(firstName: String, lastName: String, email: String, roomPreference: String, residenceHallPreference: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int) {
+        self.room = nil // initially null value
+        self.roomPreference = roomPreference
+        self.residenceHallPreference = residenceHallPreference
+        //self.room = room
         self.phoneNumber = phoneNumber
         self.creditCardNumber = creditCardNumber
         self.expirationDate = expirationDate
         self.Cvc = Cvc
         super.init(firstName: firstName, lastName: lastName, email: email)
     }
-    func getRoom() -> String { //Getter function
-        return room
-    }
+
+    
     func getPhoneNumber() -> Int { //Setter function
         return phoneNumber
     }
@@ -78,17 +83,27 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
         return creditCardNumber
     }
     func housingApplication() -> String {
+
+        if firstName.isEmpty || lastName.isEmpty{
+            print("Error putting in first or last name")
+        }
+        
+        if email.isEmpty || !email.hasSuffix("@manhattan.edu"){
+            print("Error putting in email")
+        }
+        
+        if roomPreference.isEmpty || residenceHallPreference.isEmpty {
+            return "Please fill out all room preferences."
+        }
+        
+        let paymentVerfied = PaymentSystem.paymentVer.verifyPayment(cardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
+        
+        if !paymentVerfied{
+            print("Try again")
+        }
+        
         return "Your application for housing has been submitted. We will review your application and contact you soon."
     }
-    
-    /*  Additional Functionalities
-    func updateMealPlan() -> String {
-        return "Your meal plan has been updated. We will review your meal plan and contact you soon."
-    }
-    func roommateRequestApplication() -> String {
-        return "Your roommate request application has been submitted. We will review your application and contact you soon."
-    }
-     */
     
     func mentalHealthTrackeR() -> String {
         return "Your mental health tracker has been updated. We will review your mental health tracker and contact you soon."
@@ -106,11 +121,10 @@ class RAManhattanUniversityUser: StudentManhattanUniversityUser {
     var floor: Int
     
     // Constructor to initialize atrributi
-    //override?
-    init(firstName: String, lastName: String, email: String, room: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int, hall: String, floor: Int) {
+    init(firstName: String, lastName: String, email: String, roomPreference: String, residenceHallPreference: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int, hall: String, floor: Int) {
         self.hall = hall
         self.floor = floor
-        super.init(firstName: firstName, lastName: lastName, email: email, room: room, phoneNumber: phoneNumber, creditCardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
+        super.init(firstName: firstName, lastName: lastName, email: email, roomPreference: roomPreference, residenceHallPreference: residenceHallPreference, phoneNumber: phoneNumber, creditCardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
     }
     func getFloor() -> Int { //Getter function
         return floor
@@ -122,6 +136,7 @@ class RAManhattanUniversityUser: StudentManhattanUniversityUser {
         return "\(hall) \(floor)"
     }
 }
+
 //Staff
 /* ---------- CHILD CLASS Staff User ------------------- */
 class StaffManhattanUniversityUser: ManhattanUniversityUser {
@@ -140,19 +155,39 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
     func setAuthorization(_ newAuthorization: Bool) { //Setter function
         isAuthorized = newAuthorization
     }
-    func reviewHousingApllication() -> String {
-        return "Reviewing Housing Application"
+    
+    func reviewHousingApllication(application: StudentManhattanUniversityUser) -> String {
+        print("Reviewing Housing Application")
+        
+        var approved: Bool
+        
+        print("Approve application by entering /'true' or disapprove application by entering /'false' :")
+        if let result = readLine() {
+            // Convert the input to a Bool (true/false)
+            approved = (result.lowercased() == "true")
+            
+            if approved{
+                print("Enter students room: ")
+                let room = readLine()
+                application.room = room
+                let studentDatabase = StudentDatabase()  // Assuming you have a database system
+                studentDatabase.addStudent(application)
+                print( "Applicated reviwed and updated")
+            }
+            else{
+                print( "Application denied")
+            }
+        }
+        
+        return "Reviewing complete"
     }
+    
     func reviewRAApplication() -> String {
         return "Reviewing RA Application"
     }
-    
-    /* Additional functionalities
-    func reviewRoommateRequest() -> String {
-        return "Reviewing Roommate Request"
-    }
-     */
 }
+
+
 /* ----------- Temporary database classes to replicate database system and run the funtionalities -------- */
 class StudentDatabase {
     var students: [StudentManhattanUniversityUser] = []
@@ -173,5 +208,40 @@ class RoomDatabase {
     }
     func getStudentsInRoom(_ room: String) -> [StudentManhattanUniversityUser] {
         return rooms[room] ?? []  // will return empty array instead of nil
+    }
+}
+
+
+/* ----------- Temporary payment class to replicate payment system and run the funtionalities -------- */
+class PaymentSystem{
+    static let paymentVer = PaymentSystem() // static property to create singleton to ensure the class can have only one object
+    private init() {}    //Private Initializer
+    
+    func verifyPayment(cardNumber: Int, expirationDate: String, Cvc: Int) -> Bool {
+        var valid: Bool = true // Creating inital boolean variable to determine if card info is correct and valid
+        if String(cardNumber).count != 16{
+            print("Error putting in card number") //display error to user
+            valid = false //update error to true
+        }
+        if Cvc < 100 || Cvc > 999{
+            print("Error putting in CVC") //display error to user
+            valid = false //update error to true
+        }
+        if expirationDate.contains("/"){ //check if the formate of the experiation date is correct
+            let fields = expirationDate.split(separator: "/") //check if the two fields are put in correct
+            if fields.count == 2,
+               let month = Int(fields[0]),
+               let year = Int(fields[1]),
+               (1...12).contains(month),
+               (2024...9999).contains(year) {
+            }
+            else {
+                print("Error in expiration date. It must be in MM/YYYY format with a valid range")
+                valid = false
+            }
+        }else{
+            valid = false;
+        }
+        return valid
     }
 }
