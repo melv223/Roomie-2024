@@ -38,7 +38,7 @@ struct HousingApplicationForm: View {
             
                     Form {
                         
-                        Section(header: Text("Personal Info")){
+                        Section(header: Text("Personal Info").fontWeight(.heavy)){
                             // create first name field
                             TextField("Enter first name", text: $firstName)
                                 .padding(10)
@@ -90,7 +90,7 @@ struct HousingApplicationForm: View {
                                 }
                         }
                         
-                        Section(header: Text("Preferences (Not guarenteed)")){
+                        Section(header: Text("Preferences (Not guarenteed)").fontWeight(.heavy)){
                             // create roomPreference field
                             TextField("Enter room preference", text: $roomPreference)
                                 .padding(10)
@@ -116,7 +116,7 @@ struct HousingApplicationForm: View {
                                 }
                         }
                         
-                        Section(header: Text("Payment Info")){
+                        Section(header: Text("Payment Info").fontWeight(.heavy)){
                             // create credit card field
                             TextField("Enter credit card number", text: $creditCardNumber)
                                 .keyboardType(.numberPad)
@@ -130,7 +130,7 @@ struct HousingApplicationForm: View {
                                 }
                             
                             // create expiration date field
-                            TextField("Enter expiration date", text: $expirationDate)
+                            TextField("Enter expiration date MM/YYYY", text: $expirationDate)
                                 .keyboardType(.numberPad)
                                 .padding(10)
                                 .background(Color(.systemGray6))

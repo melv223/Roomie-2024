@@ -244,29 +244,40 @@ class PaymentSystem{
     
     func verifyPayment(cardNumber: Int, expirationDate: String, Cvc: Int) -> Bool {
         var valid: Bool = true // Creating inital boolean variable to determine if card info is correct and valid
-        if String(cardNumber).count != 16{
-            print("Error putting in card number") //display error to user
+        
+        if String(cardNumber).count != 16{ //Check if string is 16 digits
+            //print("Error putting in card number") //display error to user
             valid = false //update error to true
         }
-        if Cvc < 100 || Cvc > 999{
-            print("Error putting in CVC") //display error to user
+        
+        if Cvc < 100 || Cvc > 999{ //Check if CVC is in range
+            //print("Error putting in CVC") //display error to user
             valid = false //update error to true
         }
-        if expirationDate.contains("/"){ //check if the formate of the experiation date is correct
-            let fields = expirationDate.split(separator: "/") //check if the two fields are put in correct
-            if fields.count == 2,           // If the user input the amount of fields correctly
-               let month = Int(fields[0]),  // Create variable to hold month value
-               let year = Int(fields[1]),   // Create variable to hold year value
-               (1...12).contains(month),    // Check if the range for the month is correct
-               (2024...9999).contains(year) { //Check if the range for the year is correct
+        
+        if expirationDate.contains("/"){ //Check if the formate of the experiation date is correct
+            let fields = expirationDate.split(separator: "/") //Check if the two fields are put in correct
+            if fields.count == 2{           // If the user input the amount of fields correctly
+                if let month = Int(fields[0]), let year = Int(fields[1]) {
+                    
+                    if month < 1 || month > 12 { //Check iff the month range is correct
+                        valid = false
+                    }
+                                                
+                    let currentYear = Calendar.current.component(.year, from: Date())
+                    if year < currentYear || year > 3000 { //Check iff the year range is correct
+                        valid = false
+                    }
+                } else {
+                    valid = false //Invalid month or year format
+                }
+            } else {
+                valid = false //Invalid expiration date format
             }
-            else {
-                print("Error in expiration date. It must be in MM/YYYY format with a valid range") //Inform user of error
-                valid = false
-            }
-        }else{
-            valid = false;
+        } else {
+            valid = false //Expiration date doesn't contain '/'
         }
+        
         return valid
     }
 }
