@@ -156,16 +156,20 @@ struct HousingApplicationForm: View {
                         }
                         
                         Button(action: {
-                            showingAlert = true
+                            showingAlert = true //Set value to true to represent user clicking on button
                             
+                            //Changing string values to int
                             let phoneNumberInt = Int(phoneNumber) ?? 0
                             let creditCardNumberInt = Int(creditCardNumber) ?? 0
                             let cvcInt = Int(cvc) ?? 0
                             
+                            //Update Student User information with entered information
                             let student = StudentManhattanUniversityUser(firstName: firstName, lastName: lastName, email: email, roomPreference: roomPreference, residenceHallPreference: residenceHallPreference, phoneNumber: phoneNumberInt, creditCardNumber: creditCardNumberInt, expirationDate: expirationDate, Cvc: cvcInt)
                             
+                            //Appy housing function
                             ApplicationAlert = student.housingApplication()
                             
+                            //If application if successful send the application to Admin staff user to review
                             if ApplicationAlert.contains("successfully"){
                                 let staff = StaffManhattanUniversityUser(firstName: "Admin", lastName: "Staff", email: "admin@manhattan.edu", isAuthorized: true)
                                 staff.addApplication(student)
@@ -189,6 +193,7 @@ struct HousingApplicationForm: View {
         } //end of navigation stack
     } // end of body
     
+    // When the user selects a field to enter information into, the next values should be as followed
     func determineFeild(){
         switch focusedField{
             case .firstName:
