@@ -36,6 +36,14 @@ struct HomePage: View{
                 }
                 .tag(2) //Tab 3
             
+            // Enter report issue here
+            ReportIssueView()
+                .tabItem{
+                    Image(systemName: "note") // pencil icon
+                    Text("Report Issue")
+                }
+                .tag(2) //Tab 3
+            
             
         } //end tab view
         //.padding()

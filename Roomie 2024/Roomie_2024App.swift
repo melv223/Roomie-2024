@@ -154,6 +154,15 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
     // Creating an array to store pending applications from students
     var pendingApplications: [StudentManhattanUniversityUser] = []
     
+    // Creating an array to store pending issues from students
+    var pendingIssues: [String] = []
+    
+    // Creating a function to recieve issue information and append it to the array to be reviewed
+    func addIssue(_ issue: String) -> String {
+        pendingIssues.append(issue)
+        return "Your issue has been submitted. We will review your issue and contact you soon."
+    }
+    
     // Creating a function to recieve application information and append it to the array to be reviewed
     func addApplication(_ application: StudentManhattanUniversityUser) {
         pendingApplications.append(application)
@@ -162,6 +171,11 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
     func nextApplication() -> StudentManhattanUniversityUser? {
         guard !pendingApplications.isEmpty else { return nil }
         return pendingApplications.removeFirst()
+    }
+    
+    func nextIssue() -> String? {
+        guard !pendingIssues.isEmpty else { return nil }
+        return pendingIssues.removeFirst()
     }
     
     // Constructor to initialize atrributies
@@ -175,6 +189,15 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
     }
     func setAuthorization(_ newAuthorization: Bool) { //Setter function
         isAuthorized = newAuthorization
+    }
+    
+    func reviewIssues() ->String{
+        
+        guard let issue = nextIssue() else {
+            return "No issues to review"
+        }
+        
+        return "Reviewing complete" // Return that the viewing complete
     }
     
     func reviewHousingApplication() -> String {
