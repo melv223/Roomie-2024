@@ -8,6 +8,11 @@ import SwiftUI
 
 
 struct HousingApplicationForm: View {
+    
+    init(){
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+    
     // Create variables to store user input values
     @State var firstName = ""
     @State var lastName = ""
@@ -20,7 +25,8 @@ struct HousingApplicationForm: View {
     @State var cvc = ""
     @State var applicationStatus = ""
     @State var showingAlert: Bool = false
-    //@State var ApplicationAlert: String = ""
+    @State var ApplicationAlert: String = ""
+   
     
     @FocusState private var focusedField: FormField?
         enum FormField{
@@ -151,20 +157,35 @@ struct HousingApplicationForm: View {
                         
                         Button(action: {
                             showingAlert = true
-                            //ApplicationAlert = housingApplication()
+                            
+                            let phoneNumberInt = Int(phoneNumber) ?? 0
+                            let creditCardNumberInt = Int(creditCardNumber) ?? 0
+                            let cvcInt = Int(cvc) ?? 0
+                            
+                            let student = StudentManhattanUniversityUser(firstName: firstName, lastName: lastName, email: email, roomPreference: roomPreference, residenceHallPreference: residenceHallPreference, phoneNumber: phoneNumberInt, creditCardNumber: creditCardNumberInt, expirationDate: expirationDate, Cvc: cvcInt)
+                            
+                            ApplicationAlert = student.housingApplication()
+                            
+                            if ApplicationAlert.contains("successfully"){
+                                let staff = StaffManhattanUniversityUser(firstName: "Admin", lastName: "Staff", email: "admin@manhattan.edu", isAuthorized: true)
+                                staff.addApplication(student)
+                            }
+                            
                         }, label: {
                             Text("Submit Form")
                         })
                         .alert(isPresented: $showingAlert){
-                            Alert(title: Text("Form submission"),
-                                  message: Text("Thanks \(firstName)\n Your form needs to be reviewed"),
-                                  //message: Text(housingApplication()),
+                            Alert(title: Text("Form Message"),
+                                  message: Text(ApplicationAlert),
                                   dismissButton: .default(Text("OK")))
                         }
                     } // end of form
         
             .navigationBarTitle("Housing Application")
+            
             .onAppear{focusedField = .firstName}
+            .scrollContentBackground(.hidden)
+            .background(Color.green)
         } //end of navigation stack
     } // end of body
     

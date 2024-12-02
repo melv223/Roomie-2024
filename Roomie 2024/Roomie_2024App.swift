@@ -62,6 +62,7 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
     var creditCardNumber: Int
     var expirationDate: String
     var Cvc: Int
+    var housingStatus: String = "None" //Initially set to None
     
     // Constructor to initialize atrributies
     init(firstName: String, lastName: String, email: String, roomPreference: String, residenceHallPreference: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int) {
@@ -86,27 +87,25 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
     func housingApplication() -> String {
 
         if firstName.isEmpty || lastName.isEmpty{
-            print("Error putting in first or last name")
-            return "Try again"
+            return "Error putting in first or last name"
         }
         
         if email.isEmpty || !email.hasSuffix("@manhattan.edu"){
-            print("Error putting in email")
-            return "Try again"
+            return "Error putting in email"
         }
         
         if roomPreference.isEmpty || residenceHallPreference.isEmpty {
-            print("Please fill out all room preferences")
-            return "Try again"
+            return "Error putting in prefrences"
         }
         
         let paymentVerfied = PaymentSystem.paymentVer.verifyPayment(cardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
         
         if !paymentVerfied{
-            return "Try again"
+            return "Error putting in payment"
         }
         
-        return "Your application for housing has been submitted. We will review your application and contact you soon."
+        housingStatus = "Being Reviewed"
+        return "Your application for housing has been submitted successfully. We will review your application and contact you soon."
     }
     
     func mentalHealthTrackeR() -> String {
@@ -152,6 +151,19 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
     /* Creating additional staff attributes */
     var isAuthorized: Bool // Attribute which determines if this staff user is authorized to make specific decisions
     
+    // Creating an array to store pending applications from students
+    var pendingApplications: [StudentManhattanUniversityUser] = []
+    
+    // Creating a function to recieve application information and append it to the array to be reviewed
+    func addApplication(_ application: StudentManhattanUniversityUser) {
+        pendingApplications.append(application)
+    }
+    
+    func nextApplication() -> StudentManhattanUniversityUser? {
+        guard !pendingApplications.isEmpty else { return nil }
+        return pendingApplications.removeFirst()
+    }
+    
     // Constructor to initialize atrributies
     init(firstName: String, lastName: String, email: String, isAuthorized: Bool ){
         self.isAuthorized = isAuthorized
@@ -165,12 +177,17 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
         isAuthorized = newAuthorization
     }
     
-    func reviewHousingApllication(application: StudentManhattanUniversityUser) -> String {
+    func reviewHousingApplication() -> String {
+        
+        guard let application = nextApplication() else {
+            return "No application to review"
+        }
+        
         print("Reviewing Housing Application")
         
         var approved: Bool
-        
         print("Approve application by entering /'true' or disapprove application by entering /'false' :")
+        
         if let result = readLine() {
             // Convert the input to a Bool (true/false)
             approved = (result.lowercased() == "true")
@@ -179,11 +196,13 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
                 print("Enter students room: ") // Staff enters students new room
                 let room = readLine()   //read input
                 application.room = room // Update student's room attribute
+                application.housingStatus = "Approved" //Update student housing status to approved
                 let studentDatabase = StudentDatabase()  // Assuming you have a database system
                 studentDatabase.addStudent(application) // Add students information to database if approved
                 print( "Applicated reviwed and updated") // Inform user of status
             }
             else{
+                application.housingStatus = "Denied" //Update student housing status to denied
                 print("Application denied") //Inform user of status
             }
         }
@@ -191,9 +210,6 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
         return "Reviewing complete" // Return that the viewing complete
     }
     
-    func reviewRAApplication() -> String {
-        return "Reviewing RA Application"
-    }
 }
 
 
