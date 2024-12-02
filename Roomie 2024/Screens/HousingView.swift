@@ -9,7 +9,8 @@ import SwiftUI
 struct HousingView: View {
     
     // Application status
-    @Binding var applicationStatus: String
+    //@Binding var applicationStatus: String
+    //@State var applicationStatus: String
     
     // URL links for more housing information
     let housingInfoURL = "https://inside.manhattan.edu/student-life/residence-life/Cable%20TV,%20Internet%20and%20Wireless.php"
@@ -24,6 +25,12 @@ struct HousingView: View {
                         .fontWeight(.bold)
                         .padding(.top, 20)
                         .foregroundStyle(.purple)
+                    
+                    Image(.MC)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                        .padding()
                     
                     Text("Living on campus in one of our five residence halls is an important part of the full university experience. Your floormates will become your second family — a network of friends who you'll bond with over shared meals, late night study sessions and Netflix binges.")
                         .font(.system(.body, design: .rounded))
@@ -87,18 +94,19 @@ struct HousingView: View {
                     
                     // External Link Button
                     Link("Read More About Housing Policies", destination: URL(string: housingInfoURL)!)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.white)
                         .padding(.horizontal)
                         .padding(.top, 10)
                     
                     // External Link Button
                     Link("Frequently Asked Questions", destination: URL(string: housingQAURL)!)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.white)
                         .padding(.horizontal)
                         .padding(.top, 10)
                     
                     // Initial Application Status
-                    Text(applicationStatus)
+                    let initial_status: String = "Note: Your application status will be updated once you submit your application."
+                    Text(initial_status)
                         .font(.body)
                         .padding(.horizontal)
                         .padding(.top, 20)
@@ -112,7 +120,7 @@ struct HousingView: View {
                             .font(.headline)
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.blue)
+                            .background(Color.purple)
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
@@ -121,15 +129,14 @@ struct HousingView: View {
                 }
                 //.navigationBarTitle("Housing Information", displayMode: .inline)
                 .padding()
+                .background(Gradient(colors: [.white, .orange]))
             }
         }
     }
 }
 
 #Preview {
-    // Initialize Application Status
-    @State var initial_status: String = "Status: Your application status will be updated once you submit your application."
-    
-    HousingView(applicationStatus: $initial_status)
+
+    HousingView()
 }
 

@@ -25,7 +25,7 @@ struct HousingApplicationForm: View {
     @State var cvc = ""
     @State var showingAlert: Bool = false
     @State var ApplicationAlert: String = ""
-   @State private var applicationStatus: String = "Submit application"// attempting to update application status real time
+    @State var applicationStatus: String = "Submit application"
     
     @FocusState private var focusedField: FormField?
         enum FormField{
@@ -142,7 +142,8 @@ struct HousingApplicationForm: View {
                                 }
                             
                             // create CVC field
-                            TextField("Enter CVC", text: $cvc)
+                            /* TextField("Enter CVC", text: $cvc) */
+                            SecureField("Enter CVC", text: $cvc)
                                 .keyboardType(.numberPad)
                                 .padding(10)
                                 .background(Color(.systemGray6))
@@ -169,13 +170,12 @@ struct HousingApplicationForm: View {
                             ApplicationAlert = student.housingApplication()
                             if ApplicationAlert.contains("Error"){
                                 applicationStatus = "Error"
-                                HousingView(applicationStatus:  $applicationStatus) //atempting to change application status*/
+
                             }
 
                             //If application if successful send the application to Admin staff user to review
                             if ApplicationAlert.contains("successfully"){
                                 applicationStatus = "Being Reviewed"
-                                HousingView(applicationStatus: $applicationStatus) //atempting to change application status*/
                                 let staff = StaffManhattanUniversityUser(firstName: "Admin", lastName: "Staff", email: "admin@manhattan.edu", isAuthorized: true)
                                 staff.addApplication(student)
                             }
@@ -193,7 +193,7 @@ struct HousingApplicationForm: View {
             .navigationBarTitle("Housing Application")
             .onAppear{focusedField = .firstName}
             .scrollContentBackground(.hidden)
-            .background(Color.purple)
+            .background(Gradient(colors: [.indigo, .purple]))
                    
             
         } //end of navigation stack
