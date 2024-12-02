@@ -62,12 +62,8 @@ struct HomeView: View {
                             .foregroundStyle(.black)
                     }
                 }
-                    
             }
 
-            
-            
-            
             
         }
         Spacer()

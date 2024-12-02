@@ -29,7 +29,7 @@ struct HomePage: View{
                 .tag(1) //Tab 2
             
             // Enter Mental Health here
-            Text("Mental Health Tracker")
+            MentalHealthTrackerForm()
                 .tabItem{
                     Image(systemName: "pencil") // pencil icon
                     Text("Tracker")
