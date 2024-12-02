@@ -8,9 +8,12 @@
 import Foundation
 import Swift
 import SwiftUI
-
+import FirebaseCore
 @main
 struct Roomie_2024App: App {
+    init() {
+        FirebaseApp.configure()
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()

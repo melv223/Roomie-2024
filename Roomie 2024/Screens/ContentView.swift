@@ -12,7 +12,7 @@ struct ContentView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
     
     var body: some View {
-        ZStack {
+        VStack {
             
             if isOnboardingViewActive {
                 OnboardingView()
@@ -21,7 +21,7 @@ struct ContentView: View {
                 HomeView()
             }
         }
-            .padding()
+        
         }
     }
 
