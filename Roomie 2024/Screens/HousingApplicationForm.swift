@@ -8,7 +8,7 @@ import SwiftUI
 
 
 struct HousingApplicationForm: View {
-    
+   
     init(){
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
     }
@@ -23,10 +23,9 @@ struct HousingApplicationForm: View {
     @State var creditCardNumber = ""
     @State var expirationDate = ""
     @State var cvc = ""
-    @State var applicationStatus = ""
     @State var showingAlert: Bool = false
     @State var ApplicationAlert: String = ""
-   
+   @State private var applicationStatus: String = "Submit application"// attempting to update application status real time
     
     @FocusState private var focusedField: FormField?
         enum FormField{
@@ -168,9 +167,15 @@ struct HousingApplicationForm: View {
                             
                             //Appy housing function
                             ApplicationAlert = student.housingApplication()
-                            
+                            if ApplicationAlert.contains("Error"){
+                                applicationStatus = "Error"
+                                HousingView(applicationStatus:  $applicationStatus) //atempting to change application status*/
+                            }
+
                             //If application if successful send the application to Admin staff user to review
                             if ApplicationAlert.contains("successfully"){
+                                applicationStatus = "Being Reviewed"
+                                HousingView(applicationStatus: $applicationStatus) //atempting to change application status*/
                                 let staff = StaffManhattanUniversityUser(firstName: "Admin", lastName: "Staff", email: "admin@manhattan.edu", isAuthorized: true)
                                 staff.addApplication(student)
                             }
@@ -186,10 +191,11 @@ struct HousingApplicationForm: View {
                     } // end of form
         
             .navigationBarTitle("Housing Application")
-            
             .onAppear{focusedField = .firstName}
             .scrollContentBackground(.hidden)
-            .background(Color.green)
+            .background(Color.purple)
+                   
+            
         } //end of navigation stack
     } // end of body
     
@@ -220,6 +226,7 @@ struct HousingApplicationForm: View {
     }
     
 }
+
 
 #Preview {
     HousingApplicationForm()

@@ -62,7 +62,7 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
     var creditCardNumber: Int
     var expirationDate: String
     var Cvc: Int
-    var housingStatus: String = "None" //Initially set to None
+    //var housingStatus: String = "None" //Initially set to None
     
     // Constructor to initialize atrributies
     init(firstName: String, lastName: String, email: String, roomPreference: String, residenceHallPreference: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int) {
@@ -85,7 +85,7 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
     }*/
     
     func housingApplication() -> String {
-
+        //housingStatus = "None"
         if firstName.isEmpty || lastName.isEmpty{
             return "Error putting in first or last name"
         }
@@ -104,7 +104,7 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
             return "Error putting in payment"
         }
         
-        housingStatus = "Being Reviewed"
+        //housingStatus = "Being Reviewed"
         return "Your application for housing has been submitted successfully. We will review your application and contact you soon."
     }
     
@@ -196,13 +196,13 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
                 print("Enter students room: ") // Staff enters students new room
                 let room = readLine()   //read input
                 application.room = room // Update student's room attribute
-                application.housingStatus = "Approved" //Update student housing status to approved
+                //application.applicationStatus = "Approved" //Update student housing status to approved
                 let studentDatabase = StudentDatabase()  // Assuming you have a database system
                 studentDatabase.addStudent(application) // Add students information to database if approved
                 print( "Applicated reviwed and updated") // Inform user of status
             }
             else{
-                application.housingStatus = "Denied" //Update student housing status to denied
+                //application.applicationStatus = "Denied" //Update student housing status to denied
                 print("Application denied") //Inform user of status
             }
         }
