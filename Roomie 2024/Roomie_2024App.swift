@@ -53,6 +53,7 @@ class ManhattanUniversityUser {
 //User
 /* ---------- CHILD CLASS Student User ------------------- */
 class StudentManhattanUniversityUser: ManhattanUniversityUser {
+    
     /* Creating additional student attributes */
     var room: String? // Will be assigned by staff
     var roomPreference: String
@@ -67,7 +68,6 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
         self.room = nil // initially null value
         self.roomPreference = roomPreference
         self.residenceHallPreference = residenceHallPreference
-        //self.room = room
         self.phoneNumber = phoneNumber
         self.creditCardNumber = creditCardNumber
         self.expirationDate = expirationDate
@@ -75,31 +75,35 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
         super.init(firstName: firstName, lastName: lastName, email: email)
     }
 
-    
+    /*
     func getPhoneNumber() -> Int { //Setter function
         return phoneNumber
     }
     func getCreditCardNumber() -> Int { //Getter function
         return creditCardNumber
-    }
+    }*/
+    
     func housingApplication() -> String {
 
         if firstName.isEmpty || lastName.isEmpty{
             print("Error putting in first or last name")
+            return "Try again"
         }
         
         if email.isEmpty || !email.hasSuffix("@manhattan.edu"){
             print("Error putting in email")
+            return "Try again"
         }
         
         if roomPreference.isEmpty || residenceHallPreference.isEmpty {
-            return "Please fill out all room preferences."
+            print("Please fill out all room preferences")
+            return "Try again"
         }
         
         let paymentVerfied = PaymentSystem.paymentVer.verifyPayment(cardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
         
         if !paymentVerfied{
-            print("Try again")
+            return "Try again"
         }
         
         return "Your application for housing has been submitted. We will review your application and contact you soon."
@@ -113,6 +117,7 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
         return "You have successfully logged in."
     }
 }
+
 //RA
 /* ---------- CHILD CLASS RA Student User ------------------- */
 class RAManhattanUniversityUser: StudentManhattanUniversityUser {
@@ -126,6 +131,8 @@ class RAManhattanUniversityUser: StudentManhattanUniversityUser {
         self.floor = floor
         super.init(firstName: firstName, lastName: lastName, email: email, roomPreference: roomPreference, residenceHallPreference: residenceHallPreference, phoneNumber: phoneNumber, creditCardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
     }
+    
+    /*
     func getFloor() -> Int { //Getter function
         return floor
     }
@@ -134,7 +141,8 @@ class RAManhattanUniversityUser: StudentManhattanUniversityUser {
     }
     func RAFunction() -> String {
         return "\(hall) \(floor)"
-    }
+    }*/
+    
 }
 
 //Staff
@@ -149,6 +157,7 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
         self.isAuthorized = isAuthorized
         super.init(firstName: firstName, lastName: lastName, email: email)
     }
+    
     func getAuthorization() -> Bool { //Getter function
         return isAuthorized
     }
@@ -167,19 +176,19 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
             approved = (result.lowercased() == "true")
             
             if approved{
-                print("Enter students room: ")
-                let room = readLine()
-                application.room = room
+                print("Enter students room: ") // Staff enters students new room
+                let room = readLine()   //read input
+                application.room = room // Update student's room attribute
                 let studentDatabase = StudentDatabase()  // Assuming you have a database system
-                studentDatabase.addStudent(application)
-                print( "Applicated reviwed and updated")
+                studentDatabase.addStudent(application) // Add students information to database if approved
+                print( "Applicated reviwed and updated") // Inform user of status
             }
             else{
-                print( "Application denied")
+                print("Application denied") //Inform user of status
             }
         }
         
-        return "Reviewing complete"
+        return "Reviewing complete" // Return that the viewing complete
     }
     
     func reviewRAApplication() -> String {
@@ -229,14 +238,14 @@ class PaymentSystem{
         }
         if expirationDate.contains("/"){ //check if the formate of the experiation date is correct
             let fields = expirationDate.split(separator: "/") //check if the two fields are put in correct
-            if fields.count == 2,
-               let month = Int(fields[0]),
-               let year = Int(fields[1]),
-               (1...12).contains(month),
-               (2024...9999).contains(year) {
+            if fields.count == 2,           // If the user input the amount of fields correctly
+               let month = Int(fields[0]),  // Create variable to hold month value
+               let year = Int(fields[1]),   // Create variable to hold year value
+               (1...12).contains(month),    // Check if the range for the month is correct
+               (2024...9999).contains(year) { //Check if the range for the year is correct
             }
             else {
-                print("Error in expiration date. It must be in MM/YYYY format with a valid range")
+                print("Error in expiration date. It must be in MM/YYYY format with a valid range") //Inform user of error
                 valid = false
             }
         }else{
