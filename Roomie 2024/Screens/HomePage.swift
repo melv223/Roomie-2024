@@ -14,7 +14,7 @@ struct HomePage: View{
         TabView(selection: $selectedTab){
         
             // Enter Profile View here
-            Text("Profile Page")
+            Profileview()
                 .tabItem{
                     Image(systemName: "person") // person icon
                     Text("Profile")
@@ -46,8 +46,8 @@ struct HomePage: View{
             
             
         } //end tab view
-        //.padding()
         .accentColor(.orange)
+        .statusBarHidden(false) // makes sure the bar on top remains to see time and battery percentage
     } //end body
 } //end struct
 

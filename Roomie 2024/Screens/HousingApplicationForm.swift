@@ -160,11 +160,10 @@ struct HousingApplicationForm: View {
                             
                             //Changing string values to int
                             let phoneNumberInt = Int(phoneNumber) ?? 0
-                            let creditCardNumberInt = Int(creditCardNumber) ?? 0
                             let cvcInt = Int(cvc) ?? 0
                             
                             //Update Student User information with entered information
-                            let student = StudentManhattanUniversityUser(firstName: firstName, lastName: lastName, email: email, roomPreference: roomPreference, residenceHallPreference: residenceHallPreference, phoneNumber: phoneNumberInt, creditCardNumber: creditCardNumberInt, expirationDate: expirationDate, Cvc: cvcInt)
+                            let student = StudentManhattanUniversityUser(firstName: firstName, lastName: lastName, email: email, roomPreference: roomPreference, residenceHallPreference: residenceHallPreference, phoneNumber: phoneNumberInt, creditCardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: cvcInt)
                             
                             //Appy housing function
                             ApplicationAlert = student.housingApplication()

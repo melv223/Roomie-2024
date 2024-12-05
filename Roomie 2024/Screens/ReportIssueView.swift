@@ -42,14 +42,16 @@ struct ReportIssueView: View {
                             .background(Color.purple)
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                    }
+                    } // End of navigation link
                     .padding(.horizontal)
                     .padding(.bottom, 20)
-                }
+                } // End of Vstack
                 //.navigationBarTitle("Housing Information", displayMode: .inline)
                 .padding()
-                .background(Gradient(colors: [.white, .green]))
-            }
+            } //End of scroll view
+            .frame(maxWidth: .infinity, maxHeight: .infinity) // Fill the screen
+            .background(Gradient(colors: [.white, .green]))
+            .padding(.bottom, 20)
         }
     }
 }

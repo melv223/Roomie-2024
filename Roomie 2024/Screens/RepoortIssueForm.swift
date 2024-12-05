@@ -8,9 +8,12 @@ import SwiftUI
 
 struct ReportIssueForm: View {
     
+    /* Custom Coloring
+    let darkgreen = Color(red: 0.02, green: 0.48, blue: 0.32, opacity: 1) //custom color
+ 
     init(){
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-    }
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(darkgreen)]
+    }*/
     
     @State var showingAlert: Bool = false
     @State var issue : String = ""
@@ -51,7 +54,7 @@ struct ReportIssueForm: View {
                               dismissButton: .default(Text("OK")))
                     }
                 } // end of form
-                .navigationBarTitle("Report Issue")
+                .navigationBarTitle("Report Issue") //title page
                 .scrollContentBackground(.hidden)
             } //end of navigation stack
         } // end of body

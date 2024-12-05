@@ -129,6 +129,7 @@ struct HousingView: View {
                 }
                 //.navigationBarTitle("Housing Information", displayMode: .inline)
                 .padding()
+                .padding(.bottom, 20) // making sure tab view does not get blocked
                 .background(Gradient(colors: [.white, .orange]))
             }
         }
