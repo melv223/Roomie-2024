@@ -30,117 +30,246 @@ class ManhattanUniversityUser  {
     var lastName: String
     var email: String
     
-    init(firstName: String, lastName: String, email: String) {
+    init(firstName: String, lastName: String, email: String) {  // Constructor to initialize atrributies
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
     }
-    
-    
-    func getFirstName() -> String {
+    func getFirstName() -> String { //Getter function
         return firstName
     }
-    func getLastName() -> String {
+    func getLastName() -> String { //Getter function
         return lastName
     }
-    func getEmail() -> String {
+    func getEmail() -> String { //Getter function
         return email
     }
-    func setFirstName(_ firstName: String) {
+    func setFirstName(_ firstName: String) { //Setter function
         self.firstName = firstName
     }
-    func setLastName(_ lastName: String) {
+    func setLastName(_ lastName: String) { //Setter function
         self.lastName = lastName
     }
-    func setEmail(_ email: String) {
+    func setEmail(_ email: String) { //Setter function
         self.email = email
     }
 }
+
 //User
+/* ---------- CHILD CLASS Student User ------------------- */
 class StudentManhattanUniversityUser: ManhattanUniversityUser {
-    var room: String
+    
+    /* Creating additional student attributes */
+    var room: String? // Will be assigned by staff
+    var roomPreference: String
+    var residenceHallPreference: String
     var phoneNumber: Int
-    var creditCardNumber: Int
+    var creditCardNumber: String
     var expirationDate: String
     var Cvc: Int
+    //var housingStatus: String = "None" //Initially set to None
     
-    init(firstName: String, lastName: String, email: String, room: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int) {
-        self.room = room
+    // Constructor to initialize atrributies
+    init(firstName: String, lastName: String, email: String, roomPreference: String, residenceHallPreference: String, phoneNumber: Int, creditCardNumber: String, expirationDate: String, Cvc: Int) {
+        self.room = nil // initially null value
+        self.roomPreference = roomPreference
+        self.residenceHallPreference = residenceHallPreference
         self.phoneNumber = phoneNumber
         self.creditCardNumber = creditCardNumber
         self.expirationDate = expirationDate
         self.Cvc = Cvc
         super.init(firstName: firstName, lastName: lastName, email: email)
     }
-    func getRoom() -> String {
-        return room
-    }
-    func getPhoneNumber() -> Int {
+
+    /*
+    func getPhoneNumber() -> Int { //Setter function
         return phoneNumber
     }
-    func getCreditCardNumber() -> Int {
+    func getCreditCardNumber() -> Int { //Getter function
         return creditCardNumber
-    }
+    }*/
+    
     func housingApplication() -> String {
-        return "Your application for housing has been submitted. We will review your application and contact you soon."
+        //housingStatus = "None"
+        if firstName.isEmpty || lastName.isEmpty{
+            return "Error putting in first or last name"
+        }
+        
+        if email.isEmpty || !email.hasSuffix("@manhattan.edu"){
+            return "Error putting in email"
+        }
+        
+        let string_phoneNumber = String(phoneNumber);
+        if string_phoneNumber.isEmpty || string_phoneNumber.count != 10{
+            return "Error putting in phone number"
+        }
+        
+        if roomPreference.isEmpty || residenceHallPreference.isEmpty {
+            return "Error putting in preferences"
+        }else
+        {
+            if !roomPreference.contains("Hall") && !roomPreference.contains("Suite") && !roomPreference.contains("Apartment")
+            {
+                return "Error putting in valid room preference. Must contain either Hall, Suite, or Apartment";
+            }
+            if !residenceHallPreference.contains("Chrysostom") && !residenceHallPreference.contains("Horan") && !residenceHallPreference.contains("Lee") &&  !residenceHallPreference.contains("Jasper")
+            {
+                return "Error putting in valid residence hall preference. Must contain either Chrysostom, Horan, Lee or Jasper";
+            }
+        }
+        
+        let paymentVerfied = PaymentSystem.paymentVer.verifyPayment(cardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
+        
+        if !paymentVerfied{
+            return "Error putting in payment"
+        }
+        
+        //housingStatus = "Being Reviewed"
+        return "Your application for housing has been submitted successfully. We will review your application and contact you soon."
     }
-    func updateMealPlan() -> String {
-        return "Your meal plan has been updated. We will review your meal plan and contact you soon."
-    }
-    func roommateRequestApplication() -> String {
-        return "Your roommate request application has been submitted. We will review your application and contact you soon."
-    }
+    
     func mentalHealthTrackeR() -> String {
         return "Your mental health tracker has been updated. We will review your mental health tracker and contact you soon."
     }
+    
     func login() -> String {
         return "You have successfully logged in."
     }
 }
+
 //RA
+/* ---------- CHILD CLASS RA Student User ------------------- */
 class RAManhattanUniversityUser: StudentManhattanUniversityUser {
+    /* Creating additional RA attributes */
     var hall: String
     var floor: Int
-    //override?
-    init(firstName: String, lastName: String, email: String, room: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int, hall: String, floor: Int) {
+    
+    // Constructor to initialize atrributi
+    init(firstName: String, lastName: String, email: String, roomPreference: String, residenceHallPreference: String, phoneNumber: Int, creditCardNumber: String, expirationDate: String, Cvc: Int, hall: String, floor: Int) {
         self.hall = hall
         self.floor = floor
-        super.init(firstName: firstName, lastName: lastName, email: email, room: room, phoneNumber: phoneNumber, creditCardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
+        super.init(firstName: firstName, lastName: lastName, email: email, roomPreference: roomPreference, residenceHallPreference: residenceHallPreference, phoneNumber: phoneNumber, creditCardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
     }
-    func getFloor() -> Int {
+    
+    /*
+    func getFloor() -> Int { //Getter function
         return floor
     }
-    func getHall() -> String {
+    func getHall() -> String { //Getter function
         return hall
     }
     func RAFunction() -> String {
         return "\(hall) \(floor)"
-    }
+    }*/
+    
 }
+
 //Staff
+/* ---------- CHILD CLASS Staff User ------------------- */
 class StaffManhattanUniversityUser: ManhattanUniversityUser {
-    var isAuthorized: Bool
+    
+    /* Creating additional staff attributes */
+    var isAuthorized: Bool // Attribute which determines if this staff user is authorized to make specific decisions
+    
+    // Creating an array to store pending applications from students
+    var pendingApplications: [StudentManhattanUniversityUser] = []
+    
+    // Creating an array to store pending issues from students
+    var pendingIssues: [String] = []
+    
+    // Creating a function to recieve issue information and append it to the array to be reviewed
+    func addIssue(_ issue: String) -> String {
+        if issue.isEmpty
+        {
+            return "You have not entered any issue. Try again or return to home."
+        }
+        pendingIssues.append(issue)
+        return "Your issue has been submitted. We will review your issue and contact you soon."
+    }
+    
+    // Creating a function to recieve application information and append it to the array to be reviewed
+    func addApplication(_ application: StudentManhattanUniversityUser) {
+        pendingApplications.append(application)
+    }
+    
+    func nextApplication() -> StudentManhattanUniversityUser? {
+        guard !pendingApplications.isEmpty else { return nil }
+        return pendingApplications.removeFirst()
+    }
+    
+    func nextIssue() -> String? {
+        guard !pendingIssues.isEmpty else { return nil }
+        return pendingIssues.removeFirst()
+    }
+    
+    // Constructor to initialize atrributies
     init(firstName: String, lastName: String, email: String, isAuthorized: Bool ){
         self.isAuthorized = isAuthorized
         super.init(firstName: firstName, lastName: lastName, email: email)
     }
-    func getAuthorization() -> Bool {
+    
+    func getAuthorization() -> Bool { //Getter function
         return isAuthorized
     }
-    func setAuthorization(_ newAuthorization: Bool) {
+    func setAuthorization(_ newAuthorization: Bool) { //Setter function
         isAuthorized = newAuthorization
     }
-    func reviewHousingApllication() -> String {
-        return "Reviewing Housing Application"
+    
+    func reviewIssues() ->String{
+        
+        if getAuthorization() == true //Check if staff memeber is authorized to view reports
+        {
+            guard let issue = nextIssue() else { // If issue list is empty, return no issue to review
+                return "No issues to review"
+            }
+            
+            print(issue); // Staff user will view report issue
+            
+            return "Reviewing complete" // Return that the viewing complete
+        }
+        else
+        {
+            return "This memeber is not authroized to view issue reports" // Let memeber know they are not authorized
+        }
     }
-    func reviewRAApplication() -> String {
-        return "Reviewing RA Application"
+    
+    func reviewHousingApplication() -> String {
+        
+        guard let application = nextApplication() else {
+            return "No application to review"
+        }
+        
+        print("Reviewing Housing Application")
+        
+        var approved: Bool
+        print("Approve application by entering /'true' or disapprove application by entering /'false' :")
+        
+        if let result = readLine() {
+            // Convert the input to a Bool (true/false)
+            approved = (result.lowercased() == "true")
+            
+            if approved{
+                print("Enter students room: ") // Staff enters students new room
+                let room = readLine()   //read input
+                application.room = room // Update student's room attribute
+                //application.applicationStatus = "Approved" //Update student housing status to approved
+                let studentDatabase = StudentDatabase()  // Assuming you have a database system
+                studentDatabase.addStudent(application) // Add students information to database if approved
+                print( "Applicated reviwed and updated") // Inform user of status
+            }
+            else{
+                //application.applicationStatus = "Denied" //Update student housing status to denied
+                print("Application denied") //Inform user of status
+            }
+        }
+        
+        return "Reviewing complete" // Return that the viewing complete
     }
-    func reviewRoommateRequest() -> String {
-        return "Reviewing Roommate Request"
-    }
+    
 }
-// database classes
+
+
+/* ----------- Temporary database classes to replicate database system and run the funtionalities -------- */
 class StudentDatabase {
     var students: [StudentManhattanUniversityUser] = []
     func addStudent(_ student: StudentManhattanUniversityUser) {
@@ -164,6 +293,47 @@ class RoomDatabase {
 }
 
 
-
-
-
+/* ----------- Temporary payment class to replicate payment system and run the funtionalities -------- */
+class PaymentSystem{
+    static let paymentVer = PaymentSystem() // static property to create singleton to ensure the class can have only one object
+    private init() {}    //Private Initializer
+    
+    func verifyPayment(cardNumber: String, expirationDate: String, Cvc: Int) -> Bool {
+        var valid: Bool = true // Creating inital boolean variable to determine if card info is correct and valid
+        
+        if cardNumber.count != 16 || !cardNumber.allSatisfy(\.isNumber) { //Check if string is 16 digits
+            //print("Error putting in card number") //display error to user
+            valid = false //update error to true
+        }
+        
+        if Cvc < 100 || Cvc > 9999{ //Check if CVC is in range
+            //print("Error putting in CVC") //display error to user
+            valid = false //update error to true
+        }
+        
+        if expirationDate.contains("/"){ //Check if the formate of the experiation date is correct
+            let fields = expirationDate.split(separator: "/") //Check if the two fields are put in correct
+            if fields.count == 2{           // If the user input the amount of fields correctly
+                if let month = Int(fields[0]), let year = Int(fields[1]) {
+                    
+                    if month < 1 || month > 12 { //Check iff the month range is correct
+                        valid = false
+                    }
+                                                
+                    let currentYear = Calendar.current.component(.year, from: Date())
+                    if year < currentYear || year > 3000 { //Check iff the year range is correct
+                        valid = false
+                    }
+                } else {
+                    valid = false //Invalid month or year format
+                }
+            } else {
+                valid = false //Invalid expiration date format
+            }
+        } else {
+            valid = false //Expiration date doesn't contain '/'
+        }
+        
+        return valid
+    }
+}

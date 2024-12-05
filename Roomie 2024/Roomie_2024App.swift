@@ -5,9 +5,13 @@
 //  Created by Melvin Estudillo on 10/29/24.
 //
 
+import Foundation
+import Swift
 import SwiftUI
 import FirebaseCore
 @main
+
+// changed to push
 struct Roomie_2024App: App {
     init() {
         FirebaseApp.configure()
