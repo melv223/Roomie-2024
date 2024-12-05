@@ -1,0 +1,96 @@
+//
+//  MentalHealthTrackerForm.swift
+//  Roomie 2024
+//
+//
+//
+
+
+import SwiftUI
+
+struct MentalHealthTrackerForm: View {
+    @State private var scoreText: String = ""
+    @State private var showingAlert: Bool = false
+    @State private var alertTitle: String = ""
+    @State private var alertMessage: String = ""
+    @FocusState private var focusedField: FormField?
+    
+    enum FormField {
+        case score
+    }
+    
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    Form {
+                        Section(header: Text("Mental Health Score")) {
+                            TextField("Enter a score from 1 to 10", text: $scoreText)
+                                .textFieldStyle(.roundedBorder)
+                                .keyboardType(.numberPad)
+                                .submitLabel(.done)
+                                .focused($focusedField, equals: .score)
+                                .onSubmit {
+                                    validateScore()
+                                }
+                        }
+                        
+                        Button(action: {
+                            validateScore()
+                        }) {
+                            Text("Submit Score")
+                                .frame(minWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color.green)
+                    }
+                    .navigationBarTitle("Mental Health Tracker")
+                }
+                .padding()
+                .onTapGesture {
+                    focusedField = nil // Dismiss keyboard
+                }
+            }
+            .background(Color.gray.ignoresSafeArea())
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text(alertTitle),
+                    message: Text(alertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            .onAppear {
+                focusedField = .score
+            }
+        }
+    }
+    
+    private func validateScore() {
+        guard let score = Int(scoreText), score >= 1, score <= 10 else {
+            alertTitle = "Invalid Input"
+            alertMessage = "Please enter a number between 1 - 10"
+            showingAlert = true
+            return
+        }
+        
+        let concernFlag = score < 3
+        alertTitle = concernFlag ? "Counseling Recommended" : "Great Job"
+        alertMessage = concernFlag
+            ? "Your mental health score is \(score). Consulting with RA."
+            : "Your mental health score is \(score). You are doing great!"
+        
+        // Log without email for security
+        let entry: [String: Any] = [
+            "date": Date(),
+            "score": score,
+            "concernFlag": concernFlag
+        ]
+        print("Entry Recorded: \(entry)")
+        
+        showingAlert = true
+    }
+}
+
+#Preview {
+    MentalHealthTrackerForm()
+}

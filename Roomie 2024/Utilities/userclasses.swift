@@ -5,6 +5,7 @@
 //  Created by Melvin Estudillo on 12/1/24.
 //
 import Foundation
+<<<<<<< HEAD
 import Swift
 import SwiftUI
 import FirebaseCore
@@ -13,15 +14,42 @@ import Foundation
 /* ---------- PARENT CLASS Manhattan University User ------------------- */
 class ManhattanUniversityUser {
      /* Creating user attributes */
+=======
+import FirebaseAuth
+
+//
+//  ClassesDocument.swift
+//  Classes
+//
+//  Created by Corinne Simeone on 11/29/24.
+//
+import Swift
+// User
+class ManhattanUniversityUser  {
+    
+    struct datauser: Codable {
+        let id: String
+        let Name: String
+        let Email: String
+        let joined: TimeInterval
+        
+    }
+    
+>>>>>>> main
     var firstName: String
     var lastName: String
     var email: String
     
+<<<<<<< HEAD
     init(firstName: String, lastName: String, email: String) {  // Constructor to initialize atrributies
+=======
+    init(firstName: String, lastName: String, email: String) {
+>>>>>>> main
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
     }
+<<<<<<< HEAD
     func getFirstName() -> String { //Getter function
         return firstName
     }
@@ -61,12 +89,46 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
         self.room = nil // initially null value
         self.roomPreference = roomPreference
         self.residenceHallPreference = residenceHallPreference
+=======
+    
+    
+    func getFirstName() -> String {
+        return firstName
+    }
+    func getLastName() -> String {
+        return lastName
+    }
+    func getEmail() -> String {
+        return email
+    }
+    func setFirstName(_ firstName: String) {
+        self.firstName = firstName
+    }
+    func setLastName(_ lastName: String) {
+        self.lastName = lastName
+    }
+    func setEmail(_ email: String) {
+        self.email = email
+    }
+}
+//User
+class StudentManhattanUniversityUser: ManhattanUniversityUser {
+    var room: String
+    var phoneNumber: Int
+    var creditCardNumber: Int
+    var expirationDate: String
+    var Cvc: Int
+    
+    init(firstName: String, lastName: String, email: String, room: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int) {
+        self.room = room
+>>>>>>> main
         self.phoneNumber = phoneNumber
         self.creditCardNumber = creditCardNumber
         self.expirationDate = expirationDate
         self.Cvc = Cvc
         super.init(firstName: firstName, lastName: lastName, email: email)
     }
+<<<<<<< HEAD
 
     /*
     func getPhoneNumber() -> Int { //Setter function
@@ -119,10 +181,34 @@ class StudentManhattanUniversityUser: ManhattanUniversityUser {
         return "Your mental health tracker has been updated. We will review your mental health tracker and contact you soon."
     }
     
+=======
+    func getRoom() -> String {
+        return room
+    }
+    func getPhoneNumber() -> Int {
+        return phoneNumber
+    }
+    func getCreditCardNumber() -> Int {
+        return creditCardNumber
+    }
+    func housingApplication() -> String {
+        return "Your application for housing has been submitted. We will review your application and contact you soon."
+    }
+    func updateMealPlan() -> String {
+        return "Your meal plan has been updated. We will review your meal plan and contact you soon."
+    }
+    func roommateRequestApplication() -> String {
+        return "Your roommate request application has been submitted. We will review your application and contact you soon."
+    }
+    func mentalHealthTrackeR() -> String {
+        return "Your mental health tracker has been updated. We will review your mental health tracker and contact you soon."
+    }
+>>>>>>> main
     func login() -> String {
         return "You have successfully logged in."
     }
 }
+<<<<<<< HEAD
 
 //RA
 /* ---------- CHILD CLASS RA Student User ------------------- */
@@ -143,10 +229,27 @@ class RAManhattanUniversityUser: StudentManhattanUniversityUser {
         return floor
     }
     func getHall() -> String { //Getter function
+=======
+//RA
+class RAManhattanUniversityUser: StudentManhattanUniversityUser {
+    var hall: String
+    var floor: Int
+    //override?
+    init(firstName: String, lastName: String, email: String, room: String, phoneNumber: Int, creditCardNumber: Int, expirationDate: String, Cvc: Int, hall: String, floor: Int) {
+        self.hall = hall
+        self.floor = floor
+        super.init(firstName: firstName, lastName: lastName, email: email, room: room, phoneNumber: phoneNumber, creditCardNumber: creditCardNumber, expirationDate: expirationDate, Cvc: Cvc)
+    }
+    func getFloor() -> Int {
+        return floor
+    }
+    func getHall() -> String {
+>>>>>>> main
         return hall
     }
     func RAFunction() -> String {
         return "\(hall) \(floor)"
+<<<<<<< HEAD
     }*/
     
 }
@@ -190,10 +293,18 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
     }
     
     // Constructor to initialize atrributies
+=======
+    }
+}
+//Staff
+class StaffManhattanUniversityUser: ManhattanUniversityUser {
+    var isAuthorized: Bool
+>>>>>>> main
     init(firstName: String, lastName: String, email: String, isAuthorized: Bool ){
         self.isAuthorized = isAuthorized
         super.init(firstName: firstName, lastName: lastName, email: email)
     }
+<<<<<<< HEAD
     
     func getAuthorization() -> Bool { //Getter function
         return isAuthorized
@@ -257,6 +368,25 @@ class StaffManhattanUniversityUser: ManhattanUniversityUser {
 
 
 /* ----------- Temporary database classes to replicate database system and run the funtionalities -------- */
+=======
+    func getAuthorization() -> Bool {
+        return isAuthorized
+    }
+    func setAuthorization(_ newAuthorization: Bool) {
+        isAuthorized = newAuthorization
+    }
+    func reviewHousingApllication() -> String {
+        return "Reviewing Housing Application"
+    }
+    func reviewRAApplication() -> String {
+        return "Reviewing RA Application"
+    }
+    func reviewRoommateRequest() -> String {
+        return "Reviewing Roommate Request"
+    }
+}
+// database classes
+>>>>>>> main
 class StudentDatabase {
     var students: [StudentManhattanUniversityUser] = []
     func addStudent(_ student: StudentManhattanUniversityUser) {
@@ -280,6 +410,7 @@ class RoomDatabase {
 }
 
 
+<<<<<<< HEAD
 /* ----------- Temporary payment class to replicate payment system and run the funtionalities -------- */
 class PaymentSystem{
     static let paymentVer = PaymentSystem() // static property to create singleton to ensure the class can have only one object
@@ -324,3 +455,8 @@ class PaymentSystem{
         return valid
     }
 }
+=======
+
+
+
+>>>>>>> main
