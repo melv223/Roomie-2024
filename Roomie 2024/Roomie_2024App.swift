@@ -10,6 +10,8 @@ import Swift
 import SwiftUI
 import FirebaseCore
 @main
+
+// changed to push
 struct Roomie_2024App: App {
     init() {
         FirebaseApp.configure()
