@@ -10,50 +10,47 @@ import SwiftUI
 struct HomeView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = false
     
-    @State var email : String = ""
-    @State var password : String = ""
+    @StateObject var userd = loginviewmmodel()
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 0)
-                .foregroundStyle(.colorPurple)
-                .offset(CGSize(width: 0, height: -70))
-            
-            Text("Roomie")
-                .font(.system(size: 70))
-                .fontWeight(.black)
-                .foregroundStyle(
-                    LinearGradient(colors: [.purple,.orange,.red], startPoint: .topLeading,
-                                   endPoint: .bottomTrailing ))
-            
-        }
-        .frame(width: UIScreen.main.bounds.width * 3, height: 300)
-        VStack(spacing: 20) {
-            
-           Spacer()
-            
-            Button(action:{
-                isOnboardingViewActive = true
-            }){
-                Text("Restart")
-                    .font(.largeTitle)
-                    .foregroundStyle(.black)
-            }
-            
-            
-            Form {
-                TextField("Email", text: $email)
-                SecureField("Password", text: $password)
-                HStack {
-                    Button(action:{
-                        isOnboardingViewActive = false
-                    })
-                    {
-                        Text("Create an account")
-                            .foregroundStyle(.black)
+        
+        
+        NavigationView {
+            VStack() {
+                headerview(ucolor: .colorPurple, title: "Roomie")
+                Button(action:{
+                    isOnboardingViewActive = true
+                }){
+                    Text("Restart")
+                        .font(.largeTitle)
+                        .foregroundStyle(.black)
+                }
+                
+                
+                Form {
+                    TextField("Email", text: $userd.email)
+                        .textFieldStyle(DefaultTextFieldStyle())
+                    SecureField("Password", text: $userd.password)
+                        .textFieldStyle(DefaultTextFieldStyle())
+                    Button{
+                        //try to login
+                        userd.login()
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.blue)
+                            
+                            Text("Login")
+                                .font(.title3)
+                                .foregroundStyle(.white)
+                        }
                     }
+                        
+                }
+                HStack {
+                    NavigationLink("Create an account", destination: RegistrationView())
                     
-                    Spacer()
+                    .padding()
                     Button(action:{
                         isOnboardingViewActive = false
                     })
@@ -62,13 +59,7 @@ struct HomeView: View {
                             .foregroundStyle(.black)
                     }
                 }
-                    
             }
-
-            
-            
-            
-            
         }
         Spacer()
     }
