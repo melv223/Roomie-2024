@@ -11,8 +11,17 @@ import SwiftUI
 struct ContentView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
     
+    @StateObject var viewmo = ContentViewViewModel()
+    
     var body: some View {
+        if viewmo.isSignedin , !viewmo.currentuserID.isEmpty{
+            //display homepage
+            HomePage()
+        }
+        else{
             HomeView()
+        }
+            
         
         
         }

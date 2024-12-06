@@ -30,8 +30,12 @@ struct HomeView: View {
                 Form {
                     TextField("Email", text: $userd.email)
                         .textFieldStyle(DefaultTextFieldStyle())
+                        .autocorrectionDisabled()
+                        .autocapitalization(.none)
                     SecureField("Password", text: $userd.password)
                         .textFieldStyle(DefaultTextFieldStyle())
+                        .autocorrectionDisabled()
+                        .autocapitalization(.none)
                     Button{
                         //try to login
                         userd.login()
