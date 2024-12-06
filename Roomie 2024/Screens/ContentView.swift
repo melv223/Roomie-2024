@@ -17,6 +17,7 @@ struct ContentView: View {
         if viewmo.isSignedin , !viewmo.currentuserID.isEmpty{
             //display homepage
             HomePage()
+            
         }
         else{
             HomeView()

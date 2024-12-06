@@ -14,11 +14,18 @@ final class Test: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         student = StudentManhattanUniversityUser(firstName: "John",lastName: "Doe", email: "johndoe@manhattan.edu" , roomPreference: "Hall", residenceHallPreference: "Chrysostom", phoneNumber: 1212121212, creditCardNumber: "1234567891012345", expirationDate: "12/2024", Cvc: 1234);
+        
+        
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         student = nil;
+    }
+    func test_authentication_function (){
+        
+        let result = ContentViewViewModel().isSignedin;
+        XCTAssertEqual(result, true)
     }
     
     func test_housing_function (){

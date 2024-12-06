@@ -14,16 +14,20 @@ class ContentViewViewModel: ObservableObject {
     private var handler : AuthStateDidChangeListenerHandle?
     
     
+    
     init() {
-        self.handler = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            DispatchQueue.main.async {
-                self?.currentuserID = user?.uid ?? ""
+            self.handler = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+                DispatchQueue.main.async {
+                    self?.currentuserID = user?.uid ?? ""
+                }
             }
         }
-    }
+        
     
+        public var  isSignedin: Bool {
+            return Auth.auth().currentUser != nil
+            
+        }
     
-    public var  isSignedin: Bool {
-        return Auth.auth().currentUser != nil
-    }
 }
+
